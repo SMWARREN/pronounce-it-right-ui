@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import useFetch from "../hooks/useFetch";
 import { SearchUser } from "../state/types/SearchUser";
+import { updateInputControl } from "./updateInputControl";
 
 export function ShowSingleView(empId: number) {
   const { data, error } = useFetch<SearchUser>(
@@ -21,7 +22,6 @@ export function ShowSingleView(empId: number) {
   );
   if (error) return <p>There is an error.</p>;
   if (!data) return <p>Loading...</p>;
-
   return (
     <>
       <HStack>
@@ -41,19 +41,19 @@ export function ShowSingleView(empId: number) {
             <Thead>
               <Tr>
                 <Th>Title</Th>
-                <Th>Email</Th>
                 <Th>Legal Name</Th>
-                <Th>Name Phoneme</Th>
-                <Th>Role</Th>
+                <Th>Phoneme</Th>
               </Tr>
             </Thead>
             <Tbody>
               <Tr>
                 <Td>{data.title}</Td>
-                <Td>{data.email}</Td>
                 <Td>{data.legalName}</Td>
-                <Td>{data.namePhoneme}</Td>
-                <Td>{data.role}</Td>
+                <Td>
+                  {updateInputControl({
+                    namePhoneme: data.namePhoneme,
+                  })}
+                </Td>
               </Tr>
             </Tbody>
           </Table>
