@@ -1,38 +1,50 @@
-import * as React from "react"
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+import { Box, Input, Container, Button, HStack } from "@chakra-ui/react";
+import { useRef, useState } from "react";
+import { Layout } from "./Layout";
+import Component from "./components/Component";
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
-          </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn Chakra
-          </Link>
-        </VStack>
-      </Grid>
-    </Box>
-  </ChakraProvider>
-)
+export const App = () => {
+  const [emp, setEmp] = useState("");
+  const [search, canSearch] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  return (
+    <Layout>
+      <Container maxW="4xl" padding={10}>
+        <HStack w="full" align="center">
+          <Box w="full">
+            <Input
+              ref={inputRef}
+              placeholder="Search By Name"
+              onChange={(e) => {
+                setEmp(e.target.value);
+                canSearch(false);
+              }}
+            />
+          </Box>
+
+          <Box>
+            <HStack w="full" align="center">
+              <Button disabled={emp === ""} onClick={() => canSearch(true)}>
+                Search Employee
+              </Button>
+              <Button
+                colorScheme="red"
+                disabled={emp === ""}
+                onClick={() => {
+                  setEmp("");
+                  canSearch(false);
+                  if (inputRef && inputRef.current) {
+                    inputRef.current.value = "";
+                  }
+                }}
+              >
+                Clear
+              </Button>
+            </HStack>
+          </Box>
+        </HStack>
+      </Container>
+      {search ? <Component search={emp} /> : <></>}
+    </Layout>
+  );
+};
