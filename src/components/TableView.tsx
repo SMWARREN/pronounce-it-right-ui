@@ -9,8 +9,10 @@ import {
   TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import { SearchUser } from "./Component";
+import { BASE_URL } from "../state/shared/constants";
 
 export function TableView({
   search,
@@ -19,10 +21,19 @@ export function TableView({
   search: string;
   setCurrentUser: any;
 }) {
-  const { data, error } = useFetch<SearchUser[]>(
-    `https://pronounce-it-right.azurewebsites.net/employee-info/search-employees/${search}`
+  const {
+    state: { data, error },
+    fetchData,
+  } = useFetch<SearchUser[]>(
+    `${BASE_URL}/employee-info/search-employees/${search}`
   );
 
+  useEffect(() => {
+    fetchData(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  console.log(process.env);
   if (error) return <p>There is an error.</p>;
   if (!data) return <p>Loading...</p>;
   if (data.length < 1) return <p>No Data Found.</p>;

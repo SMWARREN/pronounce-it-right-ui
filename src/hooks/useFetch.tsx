@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 
 interface State<T> {
   data?: T;
@@ -13,7 +13,13 @@ type Action<T> =
   | { type: "fetched"; payload: T }
   | { type: "error"; payload: Error };
 
-function useFetch<T = unknown>(url?: string, options?: RequestInit): State<T> {
+function useFetch<T = unknown>(
+  url?: string,
+  options?: RequestInit
+): {
+  state: State<T>;
+  fetchData: (value: React.SetStateAction<boolean>) => void;
+} {
   const cache = useRef<Cache<T>>({});
 
   // Used to prevent state update if the component is unmounted
@@ -39,51 +45,52 @@ function useFetch<T = unknown>(url?: string, options?: RequestInit): State<T> {
   };
 
   const [state, dispatch] = useReducer(fetchReducer, initialState);
+  const [shouldFetchData, setShouldFetchData] = useState(false);
 
-  useEffect(() => {
-    // Do nothing if the url is not given
+  const fetchData = useCallback(async () => {
     if (!url) return;
 
     cancelRequest.current = false;
+    dispatch({ type: "loading" });
 
-    const fetchData = async () => {
-      dispatch({ type: "loading" });
+    // If a cache exists for this url, return it
+    if (cache.current[url]) {
+      dispatch({ type: "fetched", payload: cache.current[url] });
+      return;
+    }
 
-      // If a cache exists for this url, return it
-      if (cache.current[url]) {
-        dispatch({ type: "fetched", payload: cache.current[url] });
-        return;
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error(response.statusText);
       }
 
-      try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
+      const data = (await response.json()) as T;
+      cache.current[url] = data;
+      if (cancelRequest.current) return;
 
-        const data = (await response.json()) as T;
-        cache.current[url] = data;
-        if (cancelRequest.current) return;
+      dispatch({ type: "fetched", payload: data });
+    } catch (error) {
+      if (cancelRequest.current) return;
 
-        dispatch({ type: "fetched", payload: data });
-      } catch (error) {
-        if (cancelRequest.current) return;
+      dispatch({ type: "error", payload: error as Error });
+    }
+  }, [options, url]);
 
-        dispatch({ type: "error", payload: error as Error });
-      }
-    };
-
-    void fetchData();
-
-    // Use the cleanup function for avoiding a possibly...
-    // ...state update after the component was unmounted
+  useEffect(() => {
     return () => {
       cancelRequest.current = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
-  return state;
+  useEffect(() => {
+    if (shouldFetchData) {
+      void fetchData();
+    }
+  }, [fetchData, shouldFetchData]);
+
+  return { state, fetchData: setShouldFetchData };
 }
 
 export default useFetch;

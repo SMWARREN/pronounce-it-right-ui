@@ -15,11 +15,20 @@ import {
 import useFetch from "../hooks/useFetch";
 import { SearchUser } from "../state/types/SearchUser";
 import { UpdateInputControl } from "../hooks/useInputControl";
+import { useEffect } from "react";
+import { BASE_URL } from "../state/shared/constants";
 
 export function SingleView({ empId }: { empId: number }) {
-  const { data, error } = useFetch<SearchUser>(
-    `https://pronounce-it-right.azurewebsites.net/employee-info/${empId}`
-  );
+  const {
+    state: { data, error },
+    fetchData,
+  } = useFetch<SearchUser>(`${BASE_URL}/employee-info/${empId}`);
+
+  useEffect(() => {
+    fetchData(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (error) return <p>There is an error.</p>;
   if (!data) return <p>Loading...</p>;
   return (
