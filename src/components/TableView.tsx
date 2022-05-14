@@ -9,7 +9,6 @@ import {
   TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import { SearchUser } from "./Component";
 

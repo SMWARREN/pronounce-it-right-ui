@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { ShowTableView } from "./ShowTableView";
-import { ShowSingleView } from "./ShowSingleView";
+import { TableView } from "./TableView";
+import { SingleView } from "./SingleView";
 import { Container } from "@chakra-ui/react";
 
 export type SearchUser = {
@@ -13,20 +13,26 @@ export type SearchUser = {
   role: string;
 };
 
-export default function Component({ search }: { search: string }) {
+export default function Component({
+  show,
+  search,
+}: {
+  show: boolean;
+  search: string;
+}) {
   const [currentUser, setCurrentUser] = useState(-1);
 
-  if (currentUser !== -1) {
-    return (
+  if (show) {
+    return currentUser !== -1 ? (
       <Container maxW="5xl" padding={10}>
-        {ShowSingleView(currentUser)}
+        <SingleView empId={currentUser} />{" "}
+      </Container>
+    ) : (
+      <Container maxW="4xl" padding={10}>
+        <TableView search={search} setCurrentUser={setCurrentUser} />
       </Container>
     );
   } else {
-    return (
-      <Container maxW="4xl" padding={10}>
-        {ShowTableView(search, setCurrentUser)}
-      </Container>
-    );
+    return <></>;
   }
 }

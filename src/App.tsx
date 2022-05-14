@@ -44,7 +44,7 @@ export const App = () => {
           </Box>
         </HStack>
       </Container>
-      {search ? <Component search={emp} /> : <></>}
+      <Component show={search} search={emp} />
     </Layout>
   );
 };
