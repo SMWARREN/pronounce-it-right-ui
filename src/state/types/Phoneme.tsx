@@ -1,3 +1,3 @@
 export type Phoneme = {
-  phoneme?: string;
+  phonemes?: string;
 };

@@ -11,6 +11,7 @@ import {
   ModalOverlay,
   useDisclosure,
   VStack,
+  Center,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useReactMediaRecorder } from "react-media-recorder";
@@ -19,8 +20,7 @@ import { Phoneme } from "../state/types/Phoneme";
 
 const Recorder = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const [base64, setBase64] = useState<unknown>("");
+  const [base64, setBase64] = useState<any>("");
   const {
     state: { data, error },
     fetchData,
@@ -28,8 +28,9 @@ const Recorder = () => {
     `http://wearegroot.eastus.cloudapp.azure.com:5000/pronounce-it-right/phonemes`,
     {
       method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ payload: base64 }),
+      body: JSON.stringify({
+        payload: base64.replace("data:audio/wav;base64,", ""),
+      }),
     }
   );
   const { status, startRecording, stopRecording, mediaBlobUrl } =
@@ -40,6 +41,7 @@ const Recorder = () => {
       const blob = await fetch(mediaBlobUrl).then((r) => r.blob());
       const convertedBase64 = await blobToBase64(blob);
       setBase64(convertedBase64);
+      console.log(convertedBase64);
       fetchData(true);
     }
   };
@@ -64,6 +66,9 @@ const Recorder = () => {
           <ModalCloseButton />
           <ModalBody>
             <VStack>
+              <Box>
+                <Center>{status}</Center>
+              </Box>
               <HStack>
                 <Box>
                   <Button
@@ -82,6 +87,7 @@ const Recorder = () => {
               </HStack>
               <audio src={mediaBlobUrl} controls />
             </VStack>
+            <Center> {data && <>Generated Phonemes: {data.phonemes}</>}</Center>
           </ModalBody>
 
           <ModalFooter>
