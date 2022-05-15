@@ -11,12 +11,16 @@ import {
   Box,
   Avatar,
   Spacer,
+  Container,
+  Center,
 } from "@chakra-ui/react";
+
 import useFetch from "../hooks/useFetch";
 import { SearchUser } from "../state/types/SearchUser";
 import { UpdateInputControl } from "../hooks/useInputControl";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../state/shared/constants";
+import Recorder from "./Recorder";
 
 export function SingleView({ empId }: { empId: number }) {
   const {
@@ -74,8 +78,16 @@ export function SingleView({ empId }: { empId: number }) {
             </Tbody>
           </Table>
         </TableContainer>
+
         <Spacer></Spacer>
       </HStack>
+      <Box>
+        <Container maxW="4xl" padding={10}>
+          <Center>
+            <Recorder />
+          </Center>
+        </Container>
+      </Box>
     </>
   );
 }
