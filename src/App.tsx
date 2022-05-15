@@ -1,6 +1,6 @@
 import { Box, Input, Container, Button, HStack } from "@chakra-ui/react";
 import { useRef, useState } from "react";
-import { Layout } from "./Layout";
+import { Layout } from "./components/Layout";
 import Component from "./components/Component";
 
 export const App = () => {
