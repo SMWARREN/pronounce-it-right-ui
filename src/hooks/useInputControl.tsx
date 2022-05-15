@@ -10,8 +10,16 @@ import {
   Input,
   useEditableControls,
 } from "@chakra-ui/react";
+import { SearchUser } from "../state/types/SearchUser";
 
-export function UpdateInputControl({ namePhoneme }: { namePhoneme?: string }) {
+export function UpdateInputControl({
+  props,
+  updateData,
+}: {
+  props: SearchUser;
+  updateData?: any;
+}) {
+  const { namePhoneme } = props;
   function EditableControls() {
     const {
       isEditing,
@@ -47,7 +55,7 @@ export function UpdateInputControl({ namePhoneme }: { namePhoneme?: string }) {
   return (
     <Editable
       textAlign="center"
-      onSubmit={(e) => console.log(e)}
+      onSubmit={(e) => updateData(e)}
       defaultValue={namePhoneme}
       fontSize="2xl"
       isPreviewFocusable={false}

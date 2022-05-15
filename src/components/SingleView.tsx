@@ -15,7 +15,7 @@ import {
 import useFetch from "../hooks/useFetch";
 import { SearchUser } from "../state/types/SearchUser";
 import { UpdateInputControl } from "../hooks/useInputControl";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BASE_URL } from "../state/shared/constants";
 
 export function SingleView({ empId }: { empId: number }) {
@@ -23,7 +23,16 @@ export function SingleView({ empId }: { empId: number }) {
     state: { data, error },
     fetchData,
   } = useFetch<SearchUser>(`${BASE_URL}/employee-info/${empId}`);
-
+  const [val, setVal] = useState("");
+  const updateHook = useFetch<SearchUser>(`${BASE_URL}/employee-info/`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...data, namePhoneme: val }),
+  });
+  const updateData = (_val: string) => {
+    setVal(_val);
+    updateHook.fetchData(true);
+  };
   useEffect(() => {
     fetchData(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,7 +48,7 @@ export function SingleView({ empId }: { empId: number }) {
             size="2xl"
             name={data.empName}
             src="https://bit.ly/broken-link"
-          />{" "}
+          />
         </Box>
         <Spacer></Spacer>
         <TableContainer>
@@ -59,7 +68,7 @@ export function SingleView({ empId }: { empId: number }) {
                 <Td>{data.title}</Td>
                 <Td>{data.legalName}</Td>
                 <Td>
-                  <UpdateInputControl {...{ namePhoneme: data.namePhoneme }} />
+                  <UpdateInputControl props={data} updateData={updateData} />
                 </Td>
               </Tr>
             </Tbody>

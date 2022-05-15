@@ -11,8 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import useFetch from "../hooks/useFetch";
-import { SearchUser } from "./Component";
 import { BASE_URL } from "../state/shared/constants";
+import { SearchUser } from "../state/types/SearchUser";
 
 export function TableView({
   search,
@@ -33,7 +33,6 @@ export function TableView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(process.env);
   if (error) return <p>There is an error.</p>;
   if (!data) return <p>Loading...</p>;
   if (data.length < 1) return <p>No Data Found.</p>;

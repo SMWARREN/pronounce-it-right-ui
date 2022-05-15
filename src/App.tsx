@@ -6,6 +6,7 @@ import Component from "./components/Component";
 export const App = () => {
   const [emp, setEmp] = useState("");
   const [search, canSearch] = useState(false);
+  const [currentUser, setCurrentUser] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <Layout>
@@ -17,6 +18,7 @@ export const App = () => {
               placeholder="Search By Name"
               onChange={(e) => {
                 setEmp(e.target.value);
+                setCurrentUser(-1);
                 canSearch(false);
               }}
             />
@@ -32,6 +34,7 @@ export const App = () => {
                 disabled={emp === ""}
                 onClick={() => {
                   setEmp("");
+                  setCurrentUser(-1);
                   canSearch(false);
                   if (inputRef && inputRef.current) {
                     inputRef.current.value = "";
@@ -44,7 +47,12 @@ export const App = () => {
           </Box>
         </HStack>
       </Container>
-      <Component show={search} search={emp} />
+      <Component
+        show={search}
+        search={emp}
+        currentUser={currentUser}
+        setCurrentUser={setCurrentUser}
+      />
     </Layout>
   );
 };

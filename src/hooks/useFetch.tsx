@@ -54,10 +54,10 @@ function useFetch<T = unknown>(
     dispatch({ type: "loading" });
 
     // If a cache exists for this url, return it
-    if (cache.current[url]) {
+    /*  if (cache.current[url]) {
       dispatch({ type: "fetched", payload: cache.current[url] });
       return;
-    }
+    }*/
 
     try {
       const response = await fetch(url, options);
@@ -88,6 +88,7 @@ function useFetch<T = unknown>(
     if (shouldFetchData) {
       void fetchData();
     }
+    setShouldFetchData(false);
   }, [fetchData, shouldFetchData]);
 
   return { state, fetchData: setShouldFetchData };

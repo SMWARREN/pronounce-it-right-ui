@@ -1,27 +1,19 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { TableView } from "./TableView";
 import { SingleView } from "./SingleView";
 import { Container } from "@chakra-ui/react";
 
-export type SearchUser = {
-  empId: number;
-  empName: string;
-  title: string;
-  email?: string;
-  legalName: string;
-  namePhoneme?: string;
-  role: string;
-};
-
 export default function Component({
   show,
   search,
+  currentUser,
+  setCurrentUser,
 }: {
   show: boolean;
   search: string;
+  currentUser: number;
+  setCurrentUser: Dispatch<SetStateAction<number>>;
 }) {
-  const [currentUser, setCurrentUser] = useState(-1);
-
   if (show) {
     return currentUser !== -1 ? (
       <Container maxW="5xl" padding={10}>
