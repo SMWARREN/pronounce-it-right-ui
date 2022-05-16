@@ -13,6 +13,7 @@ import {
   Spacer,
   Container,
   Center,
+  VStack,
 } from "@chakra-ui/react";
 
 import useFetch from "../hooks/useFetch";
@@ -20,7 +21,8 @@ import { SearchUser } from "../state/types/SearchUser";
 import { UpdateInputControl } from "../hooks/useInputControl";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../state/shared/constants";
-import Recorder from "./Recorder";
+import Recorder from "../hooks/Recorder";
+import { PlayAudio } from "../hooks/PlayAudio";
 
 export function SingleView({ empId }: { empId: number }) {
   const {
@@ -91,6 +93,16 @@ export function SingleView({ empId }: { empId: number }) {
       </HStack>
       <Box>
         <Container maxW="4xl" padding={10}>
+          <Box padding={10}>
+            <Center>
+              <VStack>
+                <Box> Play Phenome:</Box>
+                <Box>
+                  <PlayAudio text={data.namePhoneme} />
+                </Box>
+              </VStack>
+            </Center>
+          </Box>
           <Center>
             <Recorder updateData={updateData} />
           </Center>

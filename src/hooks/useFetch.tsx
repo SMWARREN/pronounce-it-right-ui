@@ -11,7 +11,7 @@ type Cache<T> = { [url: string]: T };
 type Action<T> =
   | { type: "loading" }
   | { type: "clear" }
-  | { type: "fetched"; payload: T }
+  | { type: "fetched"; payload?: T | any }
   | { type: "error"; payload: Error };
 
 function useFetch<T = unknown>(
@@ -22,7 +22,7 @@ function useFetch<T = unknown>(
   fetchData: (value: React.SetStateAction<boolean>) => void;
   dispatch: React.Dispatch<Action<T>>;
 } {
-  const cache = useRef<Cache<T>>({});
+  const cache = useRef<Cache<T | Blob>>({});
 
   // Used to prevent state update if the component is unmounted
   const cancelRequest = useRef<boolean>(false);
@@ -68,7 +68,12 @@ function useFetch<T = unknown>(
         throw new Error(response.statusText);
       }
 
-      const data = (await response.json()) as T;
+      let data;
+      if (url.includes("text-to-speech")) {
+        data = await response.blob();
+      } else {
+        data = (await response.json()) as T;
+      }
       cache.current[url] = data;
       if (cancelRequest.current) return;
 
