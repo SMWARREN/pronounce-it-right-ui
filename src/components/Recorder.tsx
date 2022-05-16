@@ -25,7 +25,7 @@ const Recorder = () => {
     state: { data, error },
     fetchData,
   } = useFetch<Phoneme>(
-    `http://wearegroot.eastus.cloudapp.azure.com:5000/pronounce-it-right/phonemes`,
+    `https://wearegroot.eastus.cloudapp.azure.com:5000/pronounce-it-right/phonemes`,
     {
       method: "POST",
       body: JSON.stringify({
