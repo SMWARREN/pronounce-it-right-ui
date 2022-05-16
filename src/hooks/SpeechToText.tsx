@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { ResultReason } from "microsoft-cognitiveservices-speech-sdk";
-import { Container, Icon } from "@chakra-ui/react";
+import { Box, Container, Icon, VStack } from "@chakra-ui/react";
 import { BsFillMicFill } from "react-icons/bs";
+import { SUB_KEY } from "../state/shared/constants";
 const speechsdk = require("microsoft-cognitiveservices-speech-sdk");
 
 export default class SpeechToText extends Component {
@@ -14,10 +15,7 @@ export default class SpeechToText extends Component {
 
   async sttFromMic() {
     const sdk = require("microsoft-cognitiveservices-speech-sdk");
-    const speechConfig = sdk.SpeechConfig.fromSubscription(
-      "fa51b3880f7f420186edf5028e01603c",
-      "eastus"
-    );
+    const speechConfig = sdk.SpeechConfig.fromSubscription(SUB_KEY, "eastus");
     speechConfig.speechRecognitionLanguage = "en-US";
 
     const audioConfig = speechsdk.AudioConfig.fromDefaultMicrophoneInput();
@@ -33,7 +31,7 @@ export default class SpeechToText extends Component {
     recognizer.recognizeOnceAsync((result: any) => {
       let displayText;
       if (result.reason === ResultReason.RecognizedSpeech) {
-        displayText = `RECOGNIZED: Text=${result.text}`;
+        displayText = `${result.text}`;
       } else {
         displayText =
           "ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.";
@@ -50,13 +48,15 @@ export default class SpeechToText extends Component {
     return (
       <Container className="app-container">
         <div className="row main-container">
-          <div className="col-6">
-            <Icon as={BsFillMicFill} onClick={() => this.sttFromMic()} />
-            Convert speech to text from your mic.
-          </div>
-          <div className="col-6 output-display rounded">
-            <code>{displayText}</code>
-          </div>
+          <VStack>
+            <Box>
+              <Icon as={BsFillMicFill} onClick={() => this.sttFromMic()} />
+            </Box>
+            <Box> Convert speech to text from your mic.</Box>
+            <Box>
+              <code>{displayText}</code>
+            </Box>
+          </VStack>
         </div>
       </Container>
     );
