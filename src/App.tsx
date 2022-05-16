@@ -48,12 +48,14 @@ export const App = () => {
           </Box>
         </HStack>
       </Container>
-      <Component
-        show={search}
-        search={emp}
-        currentUser={currentUser}
-        setCurrentUser={setCurrentUser}
-      />
+      <Box p={5} shadow="md" borderWidth="1px">
+        <Component
+          show={search}
+          search={emp}
+          currentUser={currentUser}
+          setCurrentUser={setCurrentUser}
+        />
+      </Box>
     </Layout>
   );
 };

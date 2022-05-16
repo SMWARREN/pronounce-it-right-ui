@@ -17,9 +17,7 @@ export default function Component({
   if (show) {
     return currentUser !== -1 ? (
       <Container maxW="5xl" padding={10}>
-        <Box p={5} shadow="md" borderWidth="1px">
-          <SingleView empId={currentUser} />{" "}
-        </Box>
+        <SingleView empId={currentUser} />{" "}
       </Container>
     ) : (
       <Container maxW="4xl" padding={10}>
