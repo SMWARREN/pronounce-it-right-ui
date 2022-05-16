@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { TableView } from "./TableView";
 import { SingleView } from "./SingleView";
-import { Container } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 
 export default function Component({
   show,
@@ -17,7 +17,9 @@ export default function Component({
   if (show) {
     return currentUser !== -1 ? (
       <Container maxW="5xl" padding={10}>
-        <SingleView empId={currentUser} />{" "}
+        <Box p={5} shadow="md" borderWidth="1px">
+          <SingleView empId={currentUser} />{" "}
+        </Box>
       </Container>
     ) : (
       <Container maxW="4xl" padding={10}>
