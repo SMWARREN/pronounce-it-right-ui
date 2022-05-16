@@ -13,18 +13,19 @@ import {
   VStack,
   Center,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
 import { Phoneme } from "../state/types/Phoneme";
 import AudioReactRecorder, { RecordState } from "audio-react-recorder";
 import { PHONEME_BASE_URL } from "../state/shared/constants";
 
-const Recorder = () => {
+const Recorder = ({ updateData }: { updateData: (_val: string) => void }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [base64, setBase64] = useState<any>("");
+  const [loading, setLoading] = useState(false);
   const [recordState, setRecordState] = useState(null);
   const {
-    state: { data },
+    state: { data, error },
     dispatch,
     fetchData,
   } = useFetch<Phoneme>(`${PHONEME_BASE_URL}/pronounce-it-right/phonemes`, {
@@ -52,6 +53,7 @@ const Recorder = () => {
   };
 
   const generatePhonemes = async () => {
+    setLoading(true);
     fetchData(true);
   };
 
@@ -62,6 +64,13 @@ const Recorder = () => {
       reader.readAsDataURL(blob);
     });
   };
+
+  useEffect(() => {
+    if (data?.phonemes && !error) {
+      updateData(data?.phonemes);
+      setLoading(false);
+    }
+  }, [data?.phonemes, updateData, error]);
 
   return (
     <>
@@ -95,12 +104,12 @@ const Recorder = () => {
 
           <ModalFooter>
             <Button
-              disabled={!base64}
+              disabled={!base64 || loading}
               colorScheme="green"
               mr={3}
               onClick={generatePhonemes}
             >
-              Generate
+              {!loading ? "Generate" : "Loading"}
             </Button>
             <Button colorScheme="blue" mr={3} onClick={onCloseFn}>
               Close

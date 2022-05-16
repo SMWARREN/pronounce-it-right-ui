@@ -33,10 +33,18 @@ export function SingleView({ empId }: { empId: number }) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ...data, namePhoneme: val }),
   });
-  const updateData = (_val: string) => {
+  const updateData = async (_val: string) => {
     setVal(_val);
     updateHook.fetchData(true);
   };
+
+  useEffect(() => {
+    if (updateHook.state.data) {
+      fetchData(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [updateHook.state.data]);
+
   useEffect(() => {
     fetchData(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,7 +92,7 @@ export function SingleView({ empId }: { empId: number }) {
       <Box>
         <Container maxW="4xl" padding={10}>
           <Center>
-            <Recorder />
+            <Recorder updateData={updateData} />
           </Center>
         </Container>
       </Box>
