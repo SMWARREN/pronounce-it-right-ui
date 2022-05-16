@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import {
   ChakraProvider,
   Box,
@@ -55,6 +55,7 @@ type Props = {
 };
 export const Layout = ({ children }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [admin, setAdmin] = useState(true);
   return (
     <ChakraProvider theme={theme}>
       <Box bg={useColorModeValue("brand.100", "brand.900")} px={4}>
@@ -106,10 +107,17 @@ export const Layout = ({ children }: Props) => {
                 />
               </MenuButton>
               <MenuList>
-                <MenuItem>Link 1</MenuItem>
-                <MenuItem>Link 2</MenuItem>
+                <MenuItem onClick={() => setAdmin(!admin)}>
+                  {admin
+                    ? "Jane Doe [Admin]"
+                    : "Jonathan Doe [Software Engineer]"}
+                </MenuItem>
                 <MenuDivider />
-                <MenuItem>Link 3</MenuItem>
+                {admin ? (
+                  <MenuItem> Options</MenuItem>
+                ) : (
+                  <MenuItem>Contact Admin</MenuItem>
+                )}
               </MenuList>
             </Menu>
           </Flex>

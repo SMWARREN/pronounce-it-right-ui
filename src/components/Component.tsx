@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { TableView } from "./TableView";
 import { SingleView } from "./SingleView";
-import { Box, Container } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 
 export default function Component({
   show,

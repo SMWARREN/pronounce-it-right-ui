@@ -57,7 +57,7 @@ export function UpdateInputControl({
       textAlign="center"
       onSubmit={(e) => updateData(e)}
       defaultValue={namePhoneme}
-      fontSize="2xl"
+      fontSize="lg"
       isPreviewFocusable={false}
     >
       <HStack>
