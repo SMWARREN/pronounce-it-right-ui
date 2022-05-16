@@ -2,6 +2,7 @@ import { Box, Input, Container, Button, HStack } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { Layout } from "./components/Layout";
 import Component from "./components/Component";
+import "./styles.css";
 
 export const App = () => {
   const [emp, setEmp] = useState("");

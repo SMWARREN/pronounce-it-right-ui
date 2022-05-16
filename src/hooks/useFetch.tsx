@@ -10,6 +10,7 @@ type Cache<T> = { [url: string]: T };
 // discriminated union type
 type Action<T> =
   | { type: "loading" }
+  | { type: "clear" }
   | { type: "fetched"; payload: T }
   | { type: "error"; payload: Error };
 
@@ -19,6 +20,7 @@ function useFetch<T = unknown>(
 ): {
   state: State<T>;
   fetchData: (value: React.SetStateAction<boolean>) => void;
+  dispatch: React.Dispatch<Action<T>>;
 } {
   const cache = useRef<Cache<T>>({});
 
@@ -33,6 +35,7 @@ function useFetch<T = unknown>(
   // Keep state logic separated
   const fetchReducer = (state: State<T>, action: Action<T>): State<T> => {
     switch (action.type) {
+      case "clear":
       case "loading":
         return { ...initialState };
       case "fetched":
@@ -91,7 +94,7 @@ function useFetch<T = unknown>(
     setShouldFetchData(false);
   }, [fetchData, shouldFetchData]);
 
-  return { state, fetchData: setShouldFetchData };
+  return { state, fetchData: setShouldFetchData, dispatch };
 }
 
 export default useFetch;
