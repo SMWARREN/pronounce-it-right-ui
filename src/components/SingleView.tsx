@@ -16,6 +16,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
+import SpeechToText from "../hooks/SpeechToText";
 import useFetch from "../hooks/useFetch";
 import { SearchUser } from "../state/types/SearchUser";
 import { UpdateInputControl } from "../hooks/useInputControl";
@@ -106,6 +107,11 @@ export function SingleView({ empId }: { empId: number }) {
           <Center>
             <Recorder updateData={updateData} />
           </Center>
+          <Box padding={10}>
+            <Center>
+              <SpeechToText />
+            </Center>
+          </Box>
         </Container>
       </Box>
     </>

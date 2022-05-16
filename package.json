@@ -16,6 +16,7 @@
     "@types/node": "^12.20.51",
     "audio-react-recorder": "^1.0.4",
     "framer-motion": "^6.3.3",
+    "microsoft-cognitiveservices-speech-sdk": "^1.21.0",
     "react": "^0.0.0-experimental-52c434be1-20220512",
     "react-dom": "^0.0.0-experimental-52c434be1-20220512",
     "react-icons": "^3.11.0",
