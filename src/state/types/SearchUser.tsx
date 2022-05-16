@@ -4,6 +4,7 @@ export type SearchUser = {
   title: string;
   email?: string;
   legalName: string;
+  pronunciation?: string;
   namePhoneme?: string;
   role: string;
 };

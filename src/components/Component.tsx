@@ -20,7 +20,7 @@ export default function Component({
         <SingleView empId={currentUser} />{" "}
       </Container>
     ) : (
-      <Container maxW="4xl" padding={10}>
+      <Container maxW="5xl" padding={10}>
         <TableView search={search} setCurrentUser={setCurrentUser} />
       </Container>
     );

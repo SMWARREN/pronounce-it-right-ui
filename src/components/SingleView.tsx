@@ -31,13 +31,23 @@ export function SingleView({ empId }: { empId: number }) {
     fetchData,
   } = useFetch<SearchUser>(`${BASE_URL}/employee-info/${empId}`);
   const [val, setVal] = useState("");
+  const [isPronunciation, setIsPronunciation] = useState(false);
+  const body = isPronunciation
+    ? JSON.stringify({ ...data, pronunciation: val })
+    : JSON.stringify({ ...data, namePhoneme: val });
+
   const updateHook = useFetch<SearchUser>(`${BASE_URL}/employee-info/`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...data, namePhoneme: val }),
+    body: body,
   });
-  const updateData = async (_val: string) => {
+  const updateData = async (_val: string, pronunciation: boolean) => {
     setVal(_val);
+    if (pronunciation) {
+      setIsPronunciation(true);
+    } else {
+      setIsPronunciation(false);
+    }
     updateHook.fetchData(true);
   };
 
@@ -76,6 +86,7 @@ export function SingleView({ empId }: { empId: number }) {
                 <Th>Title</Th>
                 <Th>Legal Name</Th>
                 <Th>Phoneme</Th>
+                <Th>Pronounation</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -83,7 +94,18 @@ export function SingleView({ empId }: { empId: number }) {
                 <Td>{data.title}</Td>
                 <Td>{data.legalName}</Td>
                 <Td>
-                  <UpdateInputControl props={data} updateData={updateData} />
+                  <UpdateInputControl
+                    isPronunciation={false}
+                    props={data}
+                    updateData={updateData}
+                  />
+                </Td>
+                <Td>
+                  <UpdateInputControl
+                    isPronunciation={true}
+                    props={data}
+                    updateData={updateData}
+                  />
                 </Td>
               </Tr>
             </Tbody>
@@ -94,23 +116,35 @@ export function SingleView({ empId }: { empId: number }) {
       </HStack>
       <Box>
         <Container maxW="4xl" padding={10}>
-          <Box padding={10}>
-            <Center>
+          <HStack></HStack>
+          <HStack>
+            <Box>
               <VStack>
-                <Box> Play Phenome:</Box>
+                <Box>Play Phenome:</Box>
                 <Box>
                   <PlayAudio text={data.namePhoneme} />
                 </Box>
               </VStack>
-            </Center>
-          </Box>
-          <Center>
-            <Recorder updateData={updateData} />
-          </Center>
-          <Box padding={10}>
-            <Center>
-              <SpeechToText />
-            </Center>
+              <Box h={10}></Box>
+            </Box>
+            <Spacer></Spacer>
+
+            <Box>
+              <VStack>
+                <Box>Play Pronounciation</Box>
+                <Box>
+                  <PlayAudio text={data.pronunciation} />
+                </Box>
+              </VStack>
+              <Box>
+                <SpeechToText />
+              </Box>
+            </Box>
+          </HStack>
+          <Box>
+            <p>
+              <Recorder updateData={updateData} />
+            </p>
           </Box>
         </Container>
       </Box>

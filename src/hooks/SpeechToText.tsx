@@ -44,7 +44,6 @@ export default class SpeechToText extends Component {
   }
 
   render() {
-    const { displayText } = this.state;
     return (
       <Container className="app-container">
         <div className="row main-container">
@@ -54,7 +53,7 @@ export default class SpeechToText extends Component {
             </Box>
             <Box> Convert speech to text from your mic.</Box>
             <Box>
-              <code>{displayText}</code>
+              <code>{this.state.displayText}</code>
             </Box>
           </VStack>
         </div>

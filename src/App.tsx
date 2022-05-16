@@ -48,7 +48,7 @@ export const App = () => {
           </Box>
         </HStack>
       </Container>
-      <Box p={5} shadow="md" borderWidth="1px">
+      <Box>
         <Component
           show={search}
           search={emp}

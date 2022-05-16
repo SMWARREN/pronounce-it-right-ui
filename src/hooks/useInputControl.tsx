@@ -15,11 +15,13 @@ import { SearchUser } from "../state/types/SearchUser";
 export function UpdateInputControl({
   props,
   updateData,
+  isPronunciation,
 }: {
   props: SearchUser;
   updateData?: any;
+  isPronunciation: boolean;
 }) {
-  const { namePhoneme } = props;
+  const { namePhoneme, pronunciation } = props;
   function EditableControls() {
     const {
       isEditing,
@@ -55,8 +57,8 @@ export function UpdateInputControl({
   return (
     <Editable
       textAlign="center"
-      onSubmit={(e) => updateData(e)}
-      defaultValue={namePhoneme}
+      onSubmit={(e) => updateData(e, isPronunciation)}
+      defaultValue={isPronunciation ? pronunciation : namePhoneme}
       fontSize="lg"
       isPreviewFocusable={false}
     >

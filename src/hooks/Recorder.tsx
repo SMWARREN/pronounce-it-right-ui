@@ -14,12 +14,16 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import useFetch from "../hooks/useFetch";
+import useFetch from "./useFetch";
 import { Phoneme } from "../state/types/Phoneme";
 import AudioReactRecorder, { RecordState } from "audio-react-recorder";
 import { PHONEME_BASE_URL } from "../state/shared/constants";
 
-const Recorder = ({ updateData }: { updateData: (_val: string) => void }) => {
+const Recorder = ({
+  updateData,
+}: {
+  updateData: (_val: string, pronunciation: boolean) => Promise<void>;
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [base64, setBase64] = useState<any>("");
   const [loading, setLoading] = useState(false);
@@ -67,16 +71,18 @@ const Recorder = ({ updateData }: { updateData: (_val: string) => void }) => {
 
   useEffect(() => {
     if (data?.phonemes && !error) {
-      updateData(data?.phonemes);
+      updateData(data?.phonemes, false);
       setLoading(false);
     }
   }, [data?.phonemes, updateData, error]);
 
   return (
     <>
-      <Button colorScheme="green" onClick={onOpen}>
-        Generate Phonemes
-      </Button>
+      <Box>
+        <Button colorScheme="green" onClick={onOpen}>
+          Generate Phonemes
+        </Button>
+      </Box>
       <Modal isOpen={isOpen} onClose={onCloseFn}>
         <ModalOverlay />
         <ModalContent>
