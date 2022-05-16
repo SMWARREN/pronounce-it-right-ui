@@ -17,6 +17,7 @@ import { useState } from "react";
 import { useReactMediaRecorder } from "react-media-recorder";
 import useFetch from "../hooks/useFetch";
 import { Phoneme } from "../state/types/Phoneme";
+import { PHONEME_BASE_URL } from "../state/shared/constants";
 
 const Recorder = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,15 +25,12 @@ const Recorder = () => {
   const {
     state: { data, error },
     fetchData,
-  } = useFetch<Phoneme>(
-    `https://wearegroot.eastus.cloudapp.azure.com:5000/pronounce-it-right/phonemes`,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        payload: base64.replace("data:audio/wav;base64,", ""),
-      }),
-    }
-  );
+  } = useFetch<Phoneme>(`${PHONEME_BASE_URL}/pronounce-it-right/phonemes`, {
+    method: "POST",
+    body: JSON.stringify({
+      payload: base64.replace("data:audio/wav;base64,", ""),
+    }),
+  });
   const { status, startRecording, stopRecording, mediaBlobUrl } =
     useReactMediaRecorder({ video: false });
 
