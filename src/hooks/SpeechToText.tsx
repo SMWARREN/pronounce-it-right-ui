@@ -1,11 +1,14 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { ResultReason } from "microsoft-cognitiveservices-speech-sdk";
 import { Box, Container, Icon, VStack } from "@chakra-ui/react";
 import { BsFillMicFill } from "react-icons/bs";
 import { SUB_KEY } from "../state/shared/constants";
 const speechsdk = require("microsoft-cognitiveservices-speech-sdk");
 
-export default class SpeechToText extends Component {
+export default class SpeechToText extends Component<
+  {},
+  { displayText: string }
+> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -44,6 +47,7 @@ export default class SpeechToText extends Component {
   }
 
   render() {
+    const { displayText } = this.state;
     return (
       <Container className="app-container">
         <div className="row main-container">
@@ -53,7 +57,7 @@ export default class SpeechToText extends Component {
             </Box>
             <Box> Convert speech to text from your mic.</Box>
             <Box>
-              <code>{this.state.displayText}</code>
+              <code>{displayText}</code>
             </Box>
           </VStack>
         </div>
